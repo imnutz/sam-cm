@@ -4,7 +4,7 @@
   "description": "Contact Manager",
   "main": "index.js",
   "scripts": {
-    "build": "browserify app/contactManager.js -o bundle.js -t [ babelify --presets [ es2015 ] ]"
+    "build": "browserify app.js -o bundle.js -t [ babelify --presets [ es2015 ] ]"
   },
   "author": "sondo",
   "license": "ISC",
