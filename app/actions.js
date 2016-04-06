@@ -44,4 +44,8 @@ actions.editContact = (id) => {
     actions.present(data)
 }
 
+actions.updateContact(data = {}) => {
+    actions.present(data);
+}
+
 module.exports = actions

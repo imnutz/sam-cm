@@ -88,6 +88,35 @@ let theme = {
         ])
     },
 
+    editContact: (contact, actions) => {
+        let firstName, lastName;
+
+        const setFirstName = (e) => {
+            firstName = e.target.value;
+        }
+        const setLastName = (e) => {
+            lastName = e.target.value;
+        }
+
+        return h("div.edit-contact", [
+            h("h3", "Edit contact: " + contact.firstName),
+            h("div.form", [
+                h("div.form-field", [
+                    h("label", "First name"),
+                    h("input", {props: {value: contact.firstName}, on: {change: setFirstName}})
+                ]),
+                h("div.form-field", [
+                    h("label", "Last name"),
+                    h("input", {props: {value: contact.lastName}, on: {change: setLastName}})
+                ]),
+                h("div.btns", [
+                    h("button", {on:{click: function() { actions.updateContact({ editId: contact.id, firstName, lastName}); }}}, "Save"),
+                    h("button", "Cancel")
+                ])
+            ])
+        ])
+    },
+
     footer: () => {
         return h("div#footer", "Copyright(C) Son Do")
     },

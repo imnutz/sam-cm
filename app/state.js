@@ -21,9 +21,9 @@ state.representation = (model) => {
     } else if(shouldShowList(model)) {
         content = state.view.contactList(model.currentCriteria, model.contacts, state.actions)
     } else if(shouldShowAbout(model)) {
-        content = state.view.about(); 
+        content = state.view.about()
     } else if(shouldShowEdit(model)) {
-        content = "Should show editing page"
+        content = state.view.editContact(model.getContact(model.editId), state.actions)
     }
 
     header = state.view.header(model.appName, model.links, state.actions)
