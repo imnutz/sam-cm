@@ -15,11 +15,12 @@ let theme = {
     },
 
     header: (title, links, actions) => {
-
         let makeLink = (link) => {
             let handler;
             if(link.title === "Contacts") {
                 handler = actions.selectContactList
+            } else if(link.title === "About") {
+                handler = actions.selectAbout
             }
 
             return h("li", [
@@ -28,7 +29,9 @@ let theme = {
         }
 
         return h("div#header", [
-            h("h1", String(title)),
+            h("h1", [
+                h("a", {on: {click: actions.selectHome}}, title)
+            ]),
             h("ul.menu", links.map(makeLink))
          ])
     },
@@ -40,16 +43,16 @@ let theme = {
     contactList: (currentCriteria, list, actions) => {
         return h("div.content", [
             theme.search(currentCriteria, actions),
-            h("div.data-grid", [ theme.makeDataGrid(list) ])
+            h("div.data-grid", [ theme.makeDataGrid(list, actions) ])
         ])
     },
 
-    makeDataGrid: (list) => {
+    makeDataGrid: (list, actions) => {
         return h("table", [
             h("thead", [
                 h("tr", theme.makeDataGridHeader(["First name", "Last name"]))
             ]),
-            h("tbody", theme.makeDataGridRow(list))
+            h("tbody", theme.makeDataGridRow(list, actions))
         ])
     },
 
@@ -65,11 +68,15 @@ let theme = {
         return gridHeaders
     },
 
-    makeDataGridRow: (list) => {
+    makeDataGridRow: (list, actions) => {
         return list.map((row) => {
             return h("tr", [
                 h("td", String(row.firstName)) ,
-                h("td", String(row.lastName))
+                h("td", String(row.lastName)),
+                h("td", [
+                    h("button", {on: {click: function() { actions.editContact(row.id); }}}, "Edit"),
+                    h("button", {on: {click: function() { actions.deleteContact(row.id); }}}, "Delete")
+                ])
             ])
         })
     },
@@ -83,6 +90,10 @@ let theme = {
 
     footer: () => {
         return h("div#footer", "Copyright(C) Son Do")
+    },
+
+    about: () => {
+        return h("div.about", "Vestibulum laoreet aliquet dapibus. In suscipit sagittis odio, a sollicitudin leo faucibus eget. Quisque porta arcu orci, at ultricies justo viverra at. Maecenas a metus iaculis massa posuere tincidunt. Etiam euismod sodales posuere. Quisque lectus elit, blandit sed urna ut, fermentum maximus leo. Cras scelerisque quam nec sagittis maximus. Nunc leo justo, venenatis eu mollis sed, condimentum sit amet purus. Praesent efficitur sodales tellus ac sodales. Aliquam consequat finibus tristique. Pellentesque pulvinar tristique magna, nec accumsan est tristique ut. Etiam convallis iaculis massa in tempor. Fusce facilisis vitae mauris sed consequat. Sed accumsan sem ipsum, id vulputate quam vehicula non.") 
     }
 }
 

@@ -1,3 +1,5 @@
+const HOME = "home"
+
 let model = {
     appName: "Contact Manager",
     links: [
@@ -7,13 +9,11 @@ let model = {
 
     contacts: [],
 
-    currentCriteria: "",
+    editId: 0,
+    deleteId: 0,
 
-    showHome: true,
-    showList: false,
-    showAbout: false,
-    showSearch: false,
-    showEdit: false
+    currentCriteria: "",
+    currentPage: HOME
 }
 
 model.init = () => model
@@ -24,8 +24,10 @@ model.present = (data) => {
     model.contacts = data.contacts || []
     model.currentCriteria = data.criteria || ""
 
-    model.showHome = data.homeSelected || false;
-    model.showList = data.listSelected || false
+    model.currentPage = data.currentPage || HOME
+
+    model.editId = data.editId || 0
+    model.deleteId = data.deleteId || 0
 
     model.render(model)
 }
