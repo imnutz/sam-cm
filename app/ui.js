@@ -88,8 +88,10 @@ let theme = {
         ])
     },
 
-    editContact: (contact, actions) => {
+    editContact: (contact, formInvalid, actions) => {
         let firstName, lastName;
+
+        let showError = Boolean(formInvalid)
 
         const setFirstName = (e) => {
             firstName = e.target.value;
@@ -98,8 +100,14 @@ let theme = {
             lastName = e.target.value;
         }
 
+        let err = ""
+        if(showError) {
+            err = h("p", "Your form is invalid")
+        }
+
         return h("div.edit-contact", [
             h("h3", "Edit contact: " + contact.firstName),
+            err,
             h("div.form", [
                 h("div.form-field", [
                     h("label", "First name"),
@@ -122,7 +130,7 @@ let theme = {
     },
 
     about: () => {
-        return h("div.about", "Vestibulum laoreet aliquet dapibus. In suscipit sagittis odio, a sollicitudin leo faucibus eget. Quisque porta arcu orci, at ultricies justo viverra at. Maecenas a metus iaculis massa posuere tincidunt. Etiam euismod sodales posuere. Quisque lectus elit, blandit sed urna ut, fermentum maximus leo. Cras scelerisque quam nec sagittis maximus. Nunc leo justo, venenatis eu mollis sed, condimentum sit amet purus. Praesent efficitur sodales tellus ac sodales. Aliquam consequat finibus tristique. Pellentesque pulvinar tristique magna, nec accumsan est tristique ut. Etiam convallis iaculis massa in tempor. Fusce facilisis vitae mauris sed consequat. Sed accumsan sem ipsum, id vulputate quam vehicula non.") 
+        return h("div.about", "Vestibulum laoreet aliquet dapibus. In suscipit sagittis odio, a sollicitudin leo faucibus eget. Quisque porta arcu orci, at ultricies justo viverra at. Maecenas a metus iaculis massa posuere tincidunt. Etiam euismod sodales posuere. Quisque lectus elit, blandit sed urna ut, fermentum maximus leo. Cras scelerisque quam nec sagittis maximus. Nunc leo justo, venenatis eu mollis sed, condimentum sit amet purus. Praesent efficitur sodales tellus ac sodales. Aliquam consequat finibus tristique. Pellentesque pulvinar tristique magna, nec accumsan est tristique ut. Etiam convallis iaculis massa in tempor. Fusce facilisis vitae mauris sed consequat. Sed accumsan sem ipsum, id vulputate quam vehicula non.")
     }
 }
 

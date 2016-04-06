@@ -8,12 +8,15 @@ let model = {
     ],
 
     contacts: [],
+    contact: null,
 
     editId: 0,
     deleteId: 0,
 
     currentCriteria: "",
-    currentPage: HOME
+    currentPage: HOME,
+
+    formInvalid: false
 }
 
 model.init = () => model
@@ -30,23 +33,14 @@ model.present = (data) => {
     model.currentPage = data.currentPage || HOME
 
     model.editId = data.editId || 0
+    model.contact = data.item || {}
+
     model.deleteId = data.deleteId || 0
 
-    if(data.editId && data.firstName && data.lastName) {
-        let contact = model.getContact(data.editId)
-        contact.firstName = data.firstName
-        contact.lastName = data.lastName
-
-        model.lastEditedItem = contact;
-    }
+    model.formInvalid = data.formInvalid || false
+    model.doneEditing = data.doneEditing
 
     model.render(model)
-}
-
-model.getContact = (id) => {
-    return model.contacts.filter((contact) => {
-        return contact.id === id
-    })[0]
 }
 
 module.exports = model
