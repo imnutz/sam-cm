@@ -2,6 +2,13 @@
 A contact manager base on [SAM Pattern](http://sam.js.org)
 
 ## Run
+- Build
+
+    ```npm install```
+
+    ```npm run build```
+
+
 - Install json-server:
 
     ```npm install -g json-server```
