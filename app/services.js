@@ -20,6 +20,22 @@ let services = {
             method: "put",
             data: contact
         })
+    },
+
+    createContact: (contact) => {
+        return reqwest({
+            url: serverRoot + urls.contacts,
+            method: "post",
+            data: contact
+        })
+    },
+
+    deleteContact: (id) => {
+        return reqwest({
+            url: serverRoot + urls.contacts + "/"+ id,
+            method: "delete"
+        })
+   
     }
 }
 

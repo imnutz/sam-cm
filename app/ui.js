@@ -74,7 +74,7 @@ let theme = {
                 h("td", String(row.firstName)) ,
                 h("td", String(row.lastName)),
                 h("td", [
-                    h("button", {on: {click: function() { actions.editContact(row.id); }}}, "Edit"),
+                    h("button", {on: {click: function() { actions.showForm(row.id); }}}, "Edit"),
                     h("button", {on: {click: function() { actions.deleteContact(row.id); }}}, "Delete")
                 ])
             ])
@@ -83,13 +83,13 @@ let theme = {
 
     search: (currentCriteria, actions) => {
         return h("div.search", [
-            h("input", {props: {type: "text", name:"criteria", value: currentCriteria}}),
-            h("button", {on: {click: actions.placeholder}}, "Search")
+            h("button", {on: {click: function() { actions.showForm() }}}, "Add new contact")
         ])
     },
 
-    editContact: (contact, formInvalid, actions) => {
-        let firstName, lastName;
+    contactForm: (contact, formInvalid, actions) => {
+        let firstName = contact.firstName || "", 
+            lastName = contact.lastName || "";
 
         let showError = Boolean(formInvalid)
 
@@ -100,13 +100,20 @@ let theme = {
             lastName = e.target.value;
         }
 
+        let title = "Add new",
+            handler = actions.save;
+        if(contact.id) {
+            title = "Edit contact: " + firstName
+            handler = actions.updateContact;
+        }
+
         let err = ""
         if(showError) {
             err = h("p", "Your form is invalid")
         }
 
         return h("div.edit-contact", [
-            h("h3", "Edit contact: " + contact.firstName),
+            h("h3", String(title)),
             err,
             h("div.form", [
                 h("div.form-field", [
@@ -118,15 +125,15 @@ let theme = {
                     h("input", {props: {value: contact.lastName}, on: {change: setLastName}})
                 ]),
                 h("div.btns", [
-                    h("button", {on:{click: function() { actions.updateContact({ editId: contact.id, firstName, lastName}); }}}, "Save"),
-                    h("button", "Cancel")
+                    h("button", {on:{click: function() { handler({ id: contact.id, firstName, lastName}); }}}, "Save"),
+                    h("button", {on:{click: function() { actions.doneCrud(); }}}, "Cancel")
                 ])
             ])
         ])
     },
 
     footer: () => {
-        return h("div#footer", "Copyright(C) Son Do")
+        return h("div#footer", "Copyright(C) sonngoc(son.ngoc@gmail.com)")
     },
 
     about: () => {

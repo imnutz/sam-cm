@@ -4,9 +4,10 @@ let state = {}
 const shouldShowHome = (model) => model.currentPage === "home"
 const shouldShowList = (model) => model.currentPage === "list"
 const shouldShowAbout = (model) => model.currentPage === "about"
-const shouldShowEdit = (model) => model.currentPage === "editContact"
+const shouldShowEdit = (model) => model.currentPage === "crudForm"
 const editFormError = (model) => Boolean(model.editId) && model.formInvalid
 const doneEditing = (model) => model.doneEditing
+const doneDeleting = (model) => model.doneDeleting
 
 state.init = (theme, actions) => {
     state.view = theme;
@@ -24,7 +25,7 @@ state.representation = (model) => {
     } else if(shouldShowAbout(model)) {
         content = state.view.about()
     } else if(shouldShowEdit(model) || editFormError(model)) {
-        content = state.view.editContact(model.contact, model.formInvalid, state.actions)
+        content = state.view.contactForm(model.contact, model.formInvalid, state.actions)
     }
 
     header = state.view.header(model.appName, model.links, state.actions)
@@ -36,7 +37,7 @@ state.representation = (model) => {
 }
 
 state.nap = (model) => {
-    if(doneEditing(model)) {
+    if(doneEditing(model) || doneDeleting(model)) {
         state.actions.selectContactList()
     }
 }

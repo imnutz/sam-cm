@@ -13,6 +13,9 @@ let model = {
     editId: 0,
     deleteId: 0,
 
+    doneEditing: false,
+    doneDeleting: false,
+
     currentCriteria: "",
     currentPage: HOME,
 
@@ -27,20 +30,30 @@ model.present = (data) => {
     if(data.contacts) {
         model.contacts = data.contacts
     }
-
     model.currentCriteria = data.criteria || ""
-
     model.currentPage = data.currentPage || HOME
 
+    model.presentEdit(data);
+    model.presentDelete(data);
+    model.presentForm(data);
+
+    model.render(model)
+}
+
+model.presentEdit = (data) => {
     model.editId = data.editId || 0
     model.contact = data.item || {}
 
-    model.deleteId = data.deleteId || 0
-
-    model.formInvalid = data.formInvalid || false
     model.doneEditing = data.doneEditing
+}
 
-    model.render(model)
+model.presentDelete = (data) => {
+    model.deleteId = data.deleteId || 0
+    model.doneDeleting = data.doneDeleting || false
+}
+
+model.presentForm = (data) => {
+    model.formInvalid = data.formInvalid || false
 }
 
 module.exports = model

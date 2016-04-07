@@ -29,41 +29,82 @@ actions.selectAbout = (data = {}) => {
     actions.present(data)
 }
 
-actions.editContact = (id) => {
+actions.showForm = (id = null) => {
     let data = {
-        currentPage: "editContact",
+        currentPage: "crudForm",
         item: {}
     };
-    actions.services
-        .fetchContact(id)
-        .then((response) => {
-            data.editId = response.id
-            data.item = response
 
-            actions.present(data)
-        })
+    if(id) {
+        actions.services
+            .fetchContact(id)
+            .then((response) => {
+                data.editId = response.id
+                data.item = response
 
+                actions.present(data)
+            })
+    } else {
+        actions.present(data)
+    }
 }
 
 actions.updateContact = (data = {}) => {
-    data.currentPage = "editContact"
+    data.currentPage = "crudForm"
 
     if(!data.firstName || !data.lastName) {
         data.formInvalid = true
         actions.present(data);
+    } else {
+        actions.services
+            .updateContact({
+                id: data.id,
+                firstName: data.firstName,
+                lastName: data.lastName
+            })
+            .then(actions.doneCrud)
+    }
+}
+
+actions.save = (data= {}) => {
+    data.currentPage = "crudForm"
+    if(!data.firstName || !data.lastName) {
+        data.formInvalid = true
+        actions.present(data);
+    } else {
+        actions.services
+            .createContact({
+                firstName: data.firstName,
+                lastName: data.lastName
+            })
+            .then(actions.doneCrud)
     }
 
-    actions.services
-        .updateContact({
-            id: data.editId,
-            firstName: data.firstName,
-            lastName: data.lastName
-        })
-        .then((response) => {
-            data.editId = null
-            data.doneEditing = true
-            actions.present(data);
-        })
+}
+
+actions.deleteContact = (id) => {
+    let confirmed = false,
+        data = {}
+
+    if(id) {
+        confirmed = confirm("Do you really want to delete this contact?")
+
+        if(confirmed) {
+            actions.services
+                   .deleteContact(id)
+                   .then((response) => {
+                        data.doneDeleting = true; 
+                        actions.present(data);
+                   })
+        }
+    }
+}
+
+actions.doneCrud = (data = {}) => {
+    data.currentPage = "list"
+    data.editId = null
+    data.doneEditing = true
+    actions.present(data);
 }
 
 module.exports = actions
