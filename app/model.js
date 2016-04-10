@@ -1,59 +1,49 @@
-const HOME = "home"
+let page = require("./constants");
 
 let model = {
     appName: "Contact Manager",
-    links: [
-        { title: "Contacts", href: "#" },
-        { title: "About", href: "#" }
+    menu: [
+        { title: "Contacts", href: "#", route: "contacts" },
+        { title: "About", href: "#", route: "about" }
     ],
 
     contacts: [],
     contact: null,
+    fetched: false,
 
-    editId: 0,
-    deleteId: 0,
+    id: null,
 
-    doneEditing: false,
-    doneDeleting: false,
+    currentPage: page.HOME_PAGE
+};
 
-    currentCriteria: "",
-    currentPage: HOME,
+model.init = () => model;
 
-    formInvalid: false
-}
-
-model.init = () => model
-
-model.setRender = (render) => model.render = render
+model.setRender = (render) => model.render = render;
+model.setServices = (services) => model.services = services;
 
 model.present = (data) => {
-    if(data.contacts) {
-        model.contacts = data.contacts
+    if(data.currentPage) {
+        model.currentPage = data.currentPage;
     }
-    model.currentCriteria = data.criteria || ""
-    model.currentPage = data.currentPage || HOME
 
-    model.presentEdit(data);
-    model.presentDelete(data);
-    model.presentForm(data);
+    if(model.currentPage === "contacts") {
+        model.services
+             .fetchContacts()
+             .then((response) => {
+                model.contacts = response || [];
+                model.render(model);
+             });
+    } else if(data.id) {
+        model.id = data.id;
+        model.services
+             .fetchContact(model.id)
+             .then((response) => {
+                model.contact = response || {};
+                model.render(model);
+             });
+    } else {
+        model.render(model);
+    }
+};
 
-    model.render(model)
-}
-
-model.presentEdit = (data) => {
-    model.editId = data.editId || 0
-    model.contact = data.item || {}
-
-    model.doneEditing = data.doneEditing
-}
-
-model.presentDelete = (data) => {
-    model.deleteId = data.deleteId || 0
-    model.doneDeleting = data.doneDeleting || false
-}
-
-model.presentForm = (data) => {
-    model.formInvalid = data.formInvalid || false
-}
-
-module.exports = model
+module.exports = model;

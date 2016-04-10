@@ -1,48 +1,27 @@
-let patch = require("snabbdom").init([
-  require('snabbdom/modules/class'),
-  require('snabbdom/modules/props'),
-  require('snabbdom/modules/style'),
-  require('snabbdom/modules/eventlisteners'),
-])
-
 let h = require("snabbdom/h");
 
 let theme = {
-    makePage: (header, content, footer) => {
-        return h("div.contact-manager-app", [
-            header, content, footer
-        ])
-    },
-
-    header: (title, links, actions) => {
-        let makeLink = (link) => {
-            let handler;
-            if(link.title === "Contacts") {
-                handler = actions.selectContactList
-            } else if(link.title === "About") {
-                handler = actions.selectAbout
-            }
-
+    header: (title, menu, actions) => {
+        let makeMenuItem = (menuItem) => {
             return h("li", [
-                h("a", {props: {href: link.href}, on: {click: handler}}, link.title)
+                h("a", {props: {href: menuItem.href}, on: {click: [actions.selectPage, menuItem.route]}}, menuItem.title)
             ])
-        }
+        };
 
         return h("div#header", [
             h("h1", [
-                h("a", {on: {click: actions.selectHome}}, title)
+                h("a", {on: {click: [actions.selectPage, "home"]}}, title)
             ]),
-            h("ul.menu", links.map(makeLink))
-         ])
+            h("ul.menu", menu.map(makeMenuItem))
+         ]);
     },
 
     home: () => {
         return h("h1", "Welcome to Contact Manager!")
     },
 
-    contactList: (currentCriteria, list, actions) => {
+    contactList: (list, actions) => {
         return h("div.content", [
-            theme.search(currentCriteria, actions),
             h("div.data-grid", [ theme.makeDataGrid(list, actions) ])
         ])
     },
@@ -74,7 +53,7 @@ let theme = {
                 h("td", String(row.firstName)) ,
                 h("td", String(row.lastName)),
                 h("td", [
-                    h("button", {on: {click: function() { actions.showForm(row.id); }}}, "Edit"),
+                    h("button", {on: {click: [actions.showForm, row.id] }}, "Edit"),
                     h("button", {on: {click: function() { actions.deleteContact(row.id); }}}, "Delete")
                 ])
             ])
@@ -88,7 +67,7 @@ let theme = {
     },
 
     contactForm: (contact, formInvalid, actions) => {
-        let firstName = contact.firstName || "", 
+        let firstName = contact.firstName || "",
             lastName = contact.lastName || "";
 
         let showError = Boolean(formInvalid)
@@ -139,23 +118,6 @@ let theme = {
     about: () => {
         return h("div.about", "Vestibulum laoreet aliquet dapibus. In suscipit sagittis odio, a sollicitudin leo faucibus eget. Quisque porta arcu orci, at ultricies justo viverra at. Maecenas a metus iaculis massa posuere tincidunt. Etiam euismod sodales posuere. Quisque lectus elit, blandit sed urna ut, fermentum maximus leo. Cras scelerisque quam nec sagittis maximus. Nunc leo justo, venenatis eu mollis sed, condimentum sit amet purus. Praesent efficitur sodales tellus ac sodales. Aliquam consequat finibus tristique. Pellentesque pulvinar tristique magna, nec accumsan est tristique ut. Etiam convallis iaculis massa in tempor. Fusce facilisis vitae mauris sed consequat. Sed accumsan sem ipsum, id vulputate quam vehicula non.")
     }
-}
-
-let vnode = document.querySelector("#app")
-theme.display = (representation) => {
-    vnode = patch(vnode, representation)
-}
-
-theme.init = (model, actions) => {
-    return theme.ready(model, actions)
-}
-
-theme.ready = (model, actions) => {
-    let content = theme.home();
-    let header = theme.header(model.appName, model.links, actions);
-    let footer = theme.footer();
-
-    return theme.makePage(header, content, footer);
 }
 
 module.exports = theme

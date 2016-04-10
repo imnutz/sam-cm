@@ -3,8 +3,8 @@ let state = require("./app/state");
 let actions = require("./app/actions");
 let model = require("./app/model");
 let services = require("./app/services");
-let theme = require("./app/ui");
+let view = require("./app/view");
 
-binder(state, actions, model, theme, services);
+binder(state, actions, model, view, services);
 
-theme.display(theme.init(model.init(), actions));
+view.display(view.init(model.init(), actions));
