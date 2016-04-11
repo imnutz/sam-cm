@@ -19,12 +19,14 @@ let view = {
     ready: (model, actions) => {
         let content = theme.home();
 
-        if(model.currentPage === constants.ABOUT_PAGE) {
+        if(model.currentRoute === constants.ABOUT_PAGE) {
             content = theme.about();
-        } else if(model.currentPage === constants.CONTACTS_PAGE) {
+        } else if(model.currentRoute === constants.CONTACTS_PAGE) {
             content = theme.contactList(model.contacts, actions);
-        } else if(model.currentPage === constants.CRUD_PAGE && model.contact) {
+        } else if(model.currentRoute === "editForm") {
             content = theme.contactForm(model.contact, false, actions);
+        } else if(model.currentRoute === "addForm") {
+            content = theme.contactForm({}, false, actions);
         }
 
         return h("div.contact-app", [

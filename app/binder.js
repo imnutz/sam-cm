@@ -4,5 +4,5 @@ module.exports = (state, actions, model, view, services) => {
     model.setRender(state.render);
     model.setServices(services);
 
-    actions.init(model.present, services);
+    actions.init(model.present);
 }

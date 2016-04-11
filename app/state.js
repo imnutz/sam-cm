@@ -15,6 +15,9 @@ state.representation = (model) => {
 }
 
 state.nap = (model) => {
+    if(model.doneUpdating || model.doneAdding || model.cancelForm) {
+        state.actions.selectPage(constants.CONTACTS_PAGE);
+    }
 }
 
 state.render = (model) => {

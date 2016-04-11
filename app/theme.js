@@ -22,6 +22,7 @@ let theme = {
 
     contactList: (list, actions) => {
         return h("div.content", [
+            theme.search(actions),
             h("div.data-grid", [ theme.makeDataGrid(list, actions) ])
         ])
     },
@@ -53,17 +54,17 @@ let theme = {
                 h("td", String(row.firstName)) ,
                 h("td", String(row.lastName)),
                 h("td", [
-                    h("button", {on: {click: [actions.showForm, row.id] }}, "Edit"),
+                    h("button", {on: {click: [actions.editForm, row.id] }}, "Edit"),
                     h("button", {on: {click: function() { actions.deleteContact(row.id); }}}, "Delete")
                 ])
             ])
         })
     },
 
-    search: (currentCriteria, actions) => {
+    search: (actions) => {
         return h("div.search", [
-            h("button", {on: {click: function() { actions.showForm() }}}, "Add new contact")
-        ])
+            h("button", {on: {click: actions.addForm}}, "Add new contact")
+        ]);
     },
 
     contactForm: (contact, formInvalid, actions) => {
@@ -104,8 +105,8 @@ let theme = {
                     h("input", {props: {value: contact.lastName}, on: {change: setLastName}})
                 ]),
                 h("div.btns", [
-                    h("button", {on:{click: function() { handler({ id: contact.id, firstName, lastName}); }}}, "Save"),
-                    h("button", {on:{click: function() { actions.doneCrud(); }}}, "Cancel")
+                    h("button", {on:{click: function() { handler({ id: contact.id, firstName, lastName}) }}}, "Save"),
+                    h("button", {on:{click: actions.cancelForm}}, "Cancel")
                 ])
             ])
         ])
@@ -116,7 +117,7 @@ let theme = {
     },
 
     about: () => {
-        return h("div.about", "Vestibulum laoreet aliquet dapibus. In suscipit sagittis odio, a sollicitudin leo faucibus eget. Quisque porta arcu orci, at ultricies justo viverra at. Maecenas a metus iaculis massa posuere tincidunt. Etiam euismod sodales posuere. Quisque lectus elit, blandit sed urna ut, fermentum maximus leo. Cras scelerisque quam nec sagittis maximus. Nunc leo justo, venenatis eu mollis sed, condimentum sit amet purus. Praesent efficitur sodales tellus ac sodales. Aliquam consequat finibus tristique. Pellentesque pulvinar tristique magna, nec accumsan est tristique ut. Etiam convallis iaculis massa in tempor. Fusce facilisis vitae mauris sed consequat. Sed accumsan sem ipsum, id vulputate quam vehicula non.")
+        return h("div.about", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse, laudantium.")
     }
 }
 
